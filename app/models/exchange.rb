@@ -1,7 +1,7 @@
 require 'byebug'
 
 class Exchange < ActiveRecord::Base
- validates :amount, :collecter, presence: true
+ validates :amount, :collector, presence: true
   def self.trans_count
     self.count
   end
@@ -15,17 +15,17 @@ class Exchange < ActiveRecord::Base
   end
 
   def self.expensive_company
-    bigger = []
-    self.all.each do |x|
-      bigger << x.amount.to_s
-    end
+    # bigger = []
+    # self.all.each do |x|
+    #   bigger << x.amount.to_s
+    # end
 
-    @h3 = Hash[bigger.map {|amount, collecter| [amount, collecter]}]
-    # companies = Hash[bigger.each { |x| [amount, collecter] }]
+    # @h3 = Hash[bigger.map {|amount, collector| [amount, collector]}]
+    # companies = Hash[bigger.each { |x| [amount, collector] }]
     # comapnies = companies.sort
 
-    # Exchange.select("collecter(:id) as ordered_date, sum(amount) as total_amount").group("collecter(:id)")
-    # Client.sum("orders_count")
+    Exchange.select("collector(id) as collector, sum(amount) as total_amount").group("collector(id)")
+    Exchange.sum("collector")
 
   end
 

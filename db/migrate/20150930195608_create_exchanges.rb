@@ -3,7 +3,7 @@ class CreateExchanges < ActiveRecord::Migration
     create_table :exchanges do |t|
       t.decimal :withdrawal
       t.decimal :deposit
-      t.string :collecter
+      t.string :collector
       
       t.timestamps null: false
     end
