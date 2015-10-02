@@ -1,56 +1,70 @@
-require 'test_helper'
+class ExchangesController < ApplicationController
+  before_action :set_exchange, only: [ :show, :edit, :update, :destroy]
+  before_action :set_statistics, only: [:index, :dashboard]
 
-class ExchangesControllerTest < ActionController::TestCase
-  setup do
-    @exchange = exchanges(:last_month)
+  # GET /exchanges
+  def index
   end
 
-  test "should get dashboard" do
-    get :dashboard
-    assert_response :success
-    assert_not_nil assigns(:broke)
-    assert response.body.include?("<body>")
+  def dashboard
   end
 
-  test "should get index" do
-    get :index
-    assert_response :success
-    assert_not_nil assigns(:exchanges)
+  # GET /exchanges/1
+  def show
   end
 
-  test "should get new" do
-    get :new
-    assert_response :success
+  # GET /exchanges/new
+  def new
+    @exchange = Exchange.new
   end
 
-  test "should create exchange" do
-    assert_difference('Exchange.count') do
-      post :create, exchange: { collector: @exchange.collector, amount: @exchange.amount }
+  # GET /exchanges/1/edit
+  def edit
+  end
+
+  # POST /exchanges
+  def create
+    @exchange = Exchange.new(exchange_params)
+
+    if @exchange.save
+      redirect_to root_path, notice: 'Exchange was successfully created.'
+    else
+      render :new
+    end
+  end
+
+  # PATCH/PUT /exchanges/1
+  def update
+    if @exchange.update(exchange_params)
+      redirect_to @exchange, notice: 'Exchange was successfully updated.'
+    else
+      render :edit
+    end
+  end
+
+  # DELETE /exchanges/1
+  def destroy
+    @exchange.destroy
+    redirect_to exchanges_url, notice: 'Exchange was successfully destroyed.'
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_exchange
+      @exchange = Exchange.find(params[:id])
     end
 
-    assert_redirected_to root_path
-  end
-
-  test "should show exchange" do
-    get :show, id: @exchange
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get :edit, id: @exchange
-    assert_response :success
-  end
-
-  test "should update exchange" do
-    patch :update, id: @exchange, exchange: { collector: @exchange.collector, deposit: @exchange.deposit, withdrawal: @exchange.withdrawal }
-    assert_redirected_to exchange_path(assigns(:exchange))
-  end
-
-  test "should destroy exchange" do
-    assert_difference('Exchange.count', -1) do
-      delete :destroy, id: @exchange
+    def set_statistics
+      @exchanges = Exchange.all
+      @trans_count = Exchange.trans_count
+      @total_money = Exchange.total_money
+      @broke = Exchange.broke
+      @maxamount = Exchange.biggest_expense
+      @expensive_company = Exchange.expensive_company
     end
 
-    assert_redirected_to exchanges_path
-  end
+    # Only allow a trusted parameter "white list" through.
+    def exchange_params
+      params.require(:exchange).permit(:collector, :amount, :phone_number)
+    end
 end

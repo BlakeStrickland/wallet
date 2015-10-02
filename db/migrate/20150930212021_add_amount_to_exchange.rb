@@ -1,5 +1,5 @@
-class AddAmountToExchange < ActiveRecord::Migration
+class AddPhoneNumber < ActiveRecord::Migration
   def change
-    add_column :exchanges, :amount, :decimal
+    add_column :exchanges, :phone_number, :integer
   end
 end
